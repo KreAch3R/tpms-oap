@@ -11,7 +11,7 @@ Connect your PECHAM TPMS Bluetooth External Sensors (and possibly other BLE mode
 
 # Acknowledgement
 
-* **HUGE** thank you to [https://github.com/andi38](https://github.com/andi38) because he reverse-engineered the bluetooth connection between the Android app and the PECHAM BLE TPMS sensors. He did half and the most important work.
+* **HUGE** thank you to [https://github.com/andi38](https://github.com/andi38) because he put together a great repo about reverse-engineering the bluetooth connection and data between the Android app and the PECHAM TPMS sensors. He did half and the most important work.
 
 * Also, thank you to user "**JonLB"** in the BlueWave forums for the OBDInject example here: https://bluewavestudio.io/community/thread-3634.html. Great proof of concept. 
 
