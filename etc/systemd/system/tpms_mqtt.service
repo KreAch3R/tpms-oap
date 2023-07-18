@@ -1,0 +1,18 @@
+[Unit]
+Description=PECHAM TPMS Sensors MQTT service
+After=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+#User=root
+ExecStart=/usr/bin/python3 /usr/local/bin/tpms-oap/tpms_mqtt.py --mqtt-topic tpms
+Restart=on-failure
+RestartSec=5
+StandardOutput=file:/home/pi/Logs/tpms_mqtt.log
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target
+

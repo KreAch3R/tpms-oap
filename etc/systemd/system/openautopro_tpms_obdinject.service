@@ -1,0 +1,16 @@
+[Unit]
+Description=OAP TPMS ODB2 Injection Service
+After=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+ExecStart=/usr/bin/python3 /usr/local/bin/tpms-oap/oap-tpms-inject.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=file:/home/pi/Logs/oap-tpms-inject.log
+StandardError=file:/home/pi/Logs/oap-tpms-inject.error
+
+[Install]
+WantedBy=multi-user.target
