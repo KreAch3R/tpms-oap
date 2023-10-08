@@ -26,6 +26,7 @@ TEMP_LIST = []
 t_injecting_active = True
 logging = True
 
+NOTIFICATION_CHANNEL_ID = None
 
 ###############################################################
 # CONNECTING TO TPMS-BLEAK MQTT Publisher
@@ -70,6 +71,19 @@ def remove_zero_from_median(list):
    #https://stackoverflow.com/a/1157132
    return [value for value in list if value != 0]
 
+def is_critical(datavalue, datatype):
+    if datatype == "batt":
+        if 0.0 < datavalue < 2.70:
+            return True
+    elif datatype == "temp":
+        if datavalue > 50:
+            return True
+    elif datatype == "press":
+        if datavalue != 0.0 and not 28 <= datavalue <= 35:
+            return True
+    else:
+        return False
+
 ###############################################################
 # ACTUAL INJECTING INTO API
 
@@ -95,7 +109,8 @@ def inject_obd_gauge_formula_value(client):
                     obd_inject_gauge_formula_value.formula = formula
                     sensor=TPMS_SENSORS_LIST[j]
                     print(sensor)
-                    obd_inject_gauge_formula_value.value = get_tpms_sensor_data(sensor, datatype)
+                    datavalue = get_tpms_sensor_data(sensor, datatype)
+                    obd_inject_gauge_formula_value.value = datavalue
 
                     client.send(oap_api.MESSAGE_OBD_INJECT_GAUGE_FORMULA_VALUE, 0,
                                     obd_inject_gauge_formula_value.SerializeToString())
@@ -104,9 +119,20 @@ def inject_obd_gauge_formula_value(client):
 
                     time.sleep(1)
 
+                    if is_critical(datavalue, datatype):
+
+                        if logging:
+                            print("Value is critical!", flush=True)
+
+                        if NOTIFICATION_CHANNEL_ID is not None:
+                            show_notification(client, sensor, datatype, datavalue)
+
+                            if logging:
+                                print("Notification shown!", flush=True)
+
                     # Store temperature values to calculate median, later
                     if datatype == "temp":
-                        print("Adding to median temp list")
+                        print("Adding to median temp list", flush=True)
                         TEMP_LIST.append(obd_inject_gauge_formula_value.value)
 
                 # Increment sensor (depends on the correct structure of TPMS_SENSORS_LIST)
@@ -127,6 +153,51 @@ def inject_obd_gauge_formula_value(client):
 
         time.sleep(1)
 
+
+##############################################################
+# Throw Notification
+
+def show_notification(client, sensor, datatype, datavalue):
+    global NOTIFICATION_CHANNEL_ID
+
+    show_notification = oap_api.ShowNotification()
+    show_notification.channel_id = NOTIFICATION_CHANNEL_ID
+    show_notification.title = "Attention!"
+
+    if datatype == "batt":
+        type = "battery"
+    elif datatype == "temp":
+        type = "temperature"
+    elif datatype == "press":
+        type = "pressure"
+
+    if sensor == "FL":
+        tire = "Front Left tire"
+        icon = "tpms-FL.svg"
+    elif sensor == "FR":
+        tire = "Front Right tire"
+        icon = "tpms-FR.svg"
+    elif sensor == "RL":
+        tire = "Rear Left tire"
+        icon = "tpms-RL.svg"
+    elif sensor == "RR":
+        tire = "Rear Right tire"
+        icon = "tpms-RR.svg"
+
+    description = ("{}'s {} is {}!".
+                 format(tire, type, datavalue))
+
+
+    show_notification.description = description
+    show_notification.single_line = description
+
+    with open("assets/" + icon, 'rb') as icon_file:
+        show_notification.icon = icon_file.read()
+
+    client.send(oap_api.MESSAGE_SHOW_NOTIFICATION, 0,
+                    show_notification.SerializeToString())
+
+
 ###############################################################
 # OBD INJECT OFFICIAL OAP CODE - HELPER FUNCTIONS AND MAIN LOOP
 
@@ -135,6 +206,26 @@ class EventHandler(ClientEventHandler):
     def on_hello_response(self, client, message):
         threading.Thread(target=inject_obd_gauge_formula_value,
                          args=(client, )).start()
+
+    # Notification code
+        register_notification_channel_request = oap_api.RegisterNotificationChannelRequest(
+        )
+        register_notification_channel_request.name = "TPMS Notification Channel"
+        register_notification_channel_request.description = "Notification channel from TPMS Sensors"
+
+        client.send(oap_api.MESSAGE_REGISTER_NOTIFICATION_CHANNEL_REQUEST, 0,
+                    register_notification_channel_request.SerializeToString())
+
+    def on_register_notification_channel_response(self, client, message):
+        global NOTIFICATION_CHANNEL_ID
+        print(
+            "register notification channel response, result: {}, icon id: {}".
+            format(message.result, message.id))
+        NOTIFICATION_CHANNEL_ID = message.id
+
+        if message.result == oap_api.RegisterNotificationChannelResponse.REGISTER_NOTIFICATION_CHANNEL_RESULT_OK:
+            print("notification channel successfully registered")
+    # Notification code
 
 def main():
     event_handler = EventHandler()
@@ -155,6 +246,15 @@ def main():
 
     global t_injecting_active
     t_injecting_active = False
+
+    # Notification code
+    if NOTIFICATION_CHANNEL_ID is not None:
+         unregister_notification_channel = oap_api.UnregisterNotificationChannel()
+         unregister_notification_channel.id = NOTIFICATION_CHANNEL_ID
+
+         oap_client.send(oap_api.MESSAGE_UNREGISTER_NOTIFICATION_CHANNEL, 0,
+                    unregister_notification_channel.SerializeToString())
+    # Notification code
 
     oap_client.disconnect()
 
