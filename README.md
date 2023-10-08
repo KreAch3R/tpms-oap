@@ -54,13 +54,18 @@ sent to OAP!
 
 These are examples. More data should start streaming in, and for all tires.
 
+**Testing**:
+There is also a dummy MQTT service included, to produce random tire sensor readings, for testing: `tpms_mqtt_dummy.py`
+
 # The End Result: 
 
-The sensors measure tire pressure, temperature and battery of the sensor itself. The wake up during rapid pressure changes and after a 5 minute drive. 
+The sensors measure tire pressure, temperature and battery of the sensor itself. The wake up during rapid pressure changes and after a 5 minute drive. There is also an OAP Notification for low tire readings.
 
 <img src="https://github.com/KreAch3R/tpms-oap/assets/2224376/c71407f1-e114-4599-a7ab-9987c7b5118c" width="800" height="500">
 
 <img src="https://github.com/KreAch3R/tpms-oap/assets/2224376/e64f7d09-3a77-4454-a97f-5f8665f96b5e" width="800" height="500">
+
+<img src="https://github.com/KreAch3R/tpms-oap/assets/2224376/f864ec6b-4183-4c55-a66c-38649fdfda43" width="800" height="300">
 
 
 # Future To-Do!
