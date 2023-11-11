@@ -73,7 +73,7 @@ def remove_zero_from_median(list):
 
 def is_critical(datavalue, datatype):
     if datatype == "batt":
-        if 0.0 < datavalue < 2.70:
+        if 0.0 < datavalue < 25:
             return True
     elif datatype == "temp":
         if datavalue > 50:

@@ -27,8 +27,8 @@ def dummy():
     while True:
         time.sleep(3)
 
-        batt = random_float(2.00, 3.30)
-        temp = random_float(10, 60)
+        batt = random_float(4, 100)
+        temp = random_float(10, 50)
         presspsi = random_float(20, 40)
 
         data = [batt, temp, presspsi]

@@ -22,11 +22,11 @@ debugLog = True
 #########################################
 # Internal Sensors List
 
-#80:EA:CA:11:F7:17 front left
+#80:EA:CA:11:7F:17 front left
 #81:EA:CA:21:83:6D front right
 #82:EA:CA:31:88:EB rear left
 #83:EA:CA:41:8C:95 rear right
-TPMS_INTERNAL_MAC_LIST = [ "80:EA:CA:11:F7:17", "81:EA:CA:21:83:6D", "82:EA:CA:31:88:EB", "83:EA:CA:41:8C:95" ]
+TPMS_INTERNAL_MAC_LIST = [ "80:EA:CA:11:7F:17", "81:EA:CA:21:83:6D", "82:EA:CA:31:88:EB", "83:EA:CA:41:8C:95" ]
 
 ########################################
 
