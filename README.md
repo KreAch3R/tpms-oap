@@ -1,18 +1,25 @@
 # TPMS-OAP
-## PECHAM TPMS External sensors - OpenAuto for RPI integration!
+### TPMS BLE sensors - OpenAuto for RPI integration!
+Currently:
+  * PECHAM TPMS External sensors
+  * SYSGRATION/EKETOOL TPMS Internal sensors
 
+Connect your TPMS BLE Sensors (currently internal and external models) to your raspberry pi running OpenAuto and use the OBD2 injection service to display the tire pressure and tire temperature in the Dashboards section:
 
-Connect your PECHAM TPMS Bluetooth External Sensors (and possibly other BLE models) to your raspberry pi running OpenAuto and use the OBD2 injection service to display the tire pressure and tire temperature in the Dashboards section:
-
-[Google Play](https://play.google.com/store/apps/details?id=com.bekubee.sytpms)
+[SYTPMS](https://play.google.com/store/apps/details?id=com.bekubee.sytpms)
+[TPMSII](https://play.google.com/store/apps/details?id=com.chaoyue.tyed&hl=el)
+[TPMS-Advanced](https://play.google.com/store/apps/details?id=com.masselis.tpmsadvanced)
 
 <img src="https://github.com/KreAch3R/tpms-oap/assets/2224376/6d916777-8c20-4544-ad82-7be2c9b215d3" height="400">
+<img src="https://github.com/KreAch3R/tpms-oap/assets/2224376/b9dd046e-99c2-4c94-bc12-2539bc9ee057" height="400">
+
+
 
 
 # Acknowledgement
 
 * **HUGE** thank you to [https://github.com/andi38](https://github.com/andi38) because he put together a great repo about reverse-engineering the bluetooth connection and data between the Android app and the PECHAM TPMS sensors. He did half and the most important work.
-
+* **HUGE** thank you to [https://github.com/VincentMasselis/TPMS-advanced] because he opensourced a great app that helped me figure out how to reverse-engineer the data output and write the python code
 * Also, thank you to user "**JonLB"** in the BlueWave forums for the OBDInject example here: https://bluewavestudio.io/community/thread-3634.html. Great proof of concept. 
 
 # Requirements
@@ -20,7 +27,7 @@ Connect your PECHAM TPMS Bluetooth External Sensors (and possibly other BLE mode
 1. [Github/TPMS](https://github.com/andi38/TPMS)
 2. [OpenAuto](https://bluewavestudio.io/shop/openauto-pro-car-head-unit-solution/)
 3. [PECHAM TPMS external sensors](https://www.aliexpress.com/item/1005004504977890.html)
-
+4. [SYSGRATION/EKETOOL internal sensors](https://www.aliexpress.com/item/32823818142.html)
 # Installation Requirements
 
 My ["NaviPi USB Update"](https://github.com/KreAch3R/navipi-usb-update) solution is supposed to be used, this is how this repository is structured. I have also included the necessary dependencies in the `tpms-oap_update.sh` file.
@@ -55,7 +62,7 @@ sent to OAP!
 These are examples. More data should start streaming in, and for all tires.
 
 **Testing**:
-There is also a dummy MQTT service included, to produce random tire sensor readings, for testing: `tpms_mqtt_dummy.py`
+There is also a dummy MQTT service included, to produce random tire sensor readings, for testing: `tpms_mqtt_dummy.py`. There is also a generic `tpms_grabber` which tries to grab output from all BLE devices in the close proximity, and a `tpms_output_parse` which can help you start reverse engineering the data byte output.
 
 # The End Result: 
 
