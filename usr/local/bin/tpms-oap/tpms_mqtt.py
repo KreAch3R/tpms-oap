@@ -22,11 +22,11 @@ debugLog = True
 #########################################
 # Internal Sensors List
 
-#80:EA:CA:11:F7:17 front left
+#80:EA:CA:11:7F:17 front left
 #81:EA:CA:21:83:6D front right
 #82:EA:CA:31:88:EB rear left
 #83:EA:CA:41:8C:95 rear right
-TPMS_INTERNAL_MAC_LIST = [ "80:EA:CA:11:F7:17", "81:EA:CA:21:83:6D", "82:EA:CA:31:88:EB", "83:EA:CA:41:8C:95" ]
+TPMS_INTERNAL_MAC_LIST = [ "80:EA:CA:11:7F:17", "81:EA:CA:21:83:6D", "82:EA:CA:31:88:EB", "83:EA:CA:41:8C:95" ]
 
 ########################################
 
@@ -50,6 +50,7 @@ def found_internal(device: BLEDevice, advertisement_data: AdvertisementData):
       mfdata = advertisement_data.manufacturer_data
       print(mfdata)
       print(device.address)
+      # Specific to SYSGRATION/EKETOOL internal TPMS sensors
       for i in range(0,len(mfdata)):
           bytes = list(mfdata.values())[i]
           byte_array = bytearray(bytes)
@@ -78,32 +79,14 @@ def found_internal(device: BLEDevice, advertisement_data: AdvertisementData):
 
           data_list = [batt, temp, presspsi]
 
-          if (device.address == TPMS_INTERNAL_MAC_LIST[0]):  # front left
-              device_name="Front Left"
-              TPMS_DATA_DICT["FL"] = data_list
-          elif (device.address == TPMS_INTERNAL_MAC_LIST[1]):  # front right
-              device_name="Front Right"
-              TPMS_DATA_DICT["FR"] = data_list
-          elif (device.address == TPMS_INTERNAL_MAC_LIST[2]):  # rear left
-              device_name="Rear Left"
-              TPMS_DATA_DICT["RL"] = data_list
-          elif (device.address == TPMS_INTERNAL_MAC_LIST[3]):  # rear right
-              device_name="Rear Right"
-              TPMS_DATA_DICT["RR"] = data_list
-
-      print(device_name,": B: ",batt, "  T: ",temp,"  p: ",presspsi, sep='')
-
-  # Create json list
-  # https://stackoverflow.com/a/32824345
-  payload=json.dumps(TPMS_DATA_DICT)
-  single(payload=payload, topic=mqtt_topic, port=mqtt_port, hostname=mqtt_hostname)
-
+    prepare_payload(device.address, data_list, TPMS_INTERNAL_MAC_LIST)
 
 def found_external(device: BLEDevice, advertisement_data: AdvertisementData):
   if device.address in TPMS_EXTERNAL_MAC_LIST:
       mfdata = advertisement_data.manufacturer_data
       print(mfdata)
       print(device.address)
+      # Specific to PECHAM external BLE TPMS sensors
       for i in range(0,len(mfdata)):
           # We only need the last element of the range
           data1 = list(mfdata.keys())[-1]
@@ -117,26 +100,31 @@ def found_external(device: BLEDevice, advertisement_data: AdvertisementData):
           presspsi = round(press*14.50377,2)
           data_list = [batt, temp, presspsi]
 
-          if (device.address == TPMS_EXTERNAL_MAC_LIST[0]):  # front left
-              device_name="Front Left"
-              TPMS_DATA_DICT["FL"] = data_list
-          elif (device.address == TPMS_EXTERNAL_MAC_LIST[1]):  # front right
-              device_name="Front Right"
-              TPMS_DATA_DICT["FR"] = data_list
-          elif (device.address == TPMS_EXTERNAL_MAC_LIST[2]):  # rear left
-              device_name="Rear Left"
-              TPMS_DATA_DICT["RL"] = data_list
-          elif (device.address == TPMS_EXTERNAL_MAC_LIST[3]):  # rear right
-              device_name="Rear Right"
-              TPMS_DATA_DICT["RR"] = data_list
+  prepare_payload(device.address, data_list, TPMS_EXTERNAL_MAC_LIST)
 
-      print(device_name,": B: ",batt, "  T: ",temp,"  p: ",presspsi, sep='')
+def prepare_payload(address: str, data_list: list, tpms_mac_list: list):
+    TPMS_BLUETOOTH_MAC_LIST = tpms_mac_list
 
-  # Create json list
-  # https://stackoverflow.com/a/32824345
-  payload=json.dumps(TPMS_DATA_DICT)
-  single(payload=payload, topic=mqtt_topic, port=mqtt_port, hostname=mqtt_hostname)
+    if (address == TPMS_BLUETOOTH_MAC_LIST[0]):  # front left
+        device_name="Front Left"
+        TPMS_DATA_DICT["FL"] = data_list
+    elif (address == TPMS_BLUETOOTH_MAC_LIST[1]):  # front right
+        device_name="Front Right"
+        TPMS_DATA_DICT["FR"] = data_list
+    elif (address == TPMS_BLUETOOTH_MAC_LIST[2]):  # rear left
+        device_name="Rear Left"
+        TPMS_DATA_DICT["RL"] = data_list
+    elif (address == TPMS_BLUETOOTH_MAC_LIST[3]):  # rear right
+        device_name="Rear Right"
+        TPMS_DATA_DICT["RR"] = data_list
 
+    print(device_name,": B: ",batt, "  T: ",temp,"  p: ",presspsi, sep='')
+
+    # Create json list
+    # https://stackoverflow.com/a/32824345
+    payload=json.dumps(TPMS_DATA_DICT)
+    # Send payload to MQTT
+    single(payload=payload, topic=mqtt_topic, port=mqtt_port, hostname=mqtt_hostname)
 
 async def main():
     global mqtt_topic
