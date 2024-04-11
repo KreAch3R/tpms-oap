@@ -35,7 +35,7 @@ My ["NaviPi USB Update"](https://github.com/KreAch3R/navipi-usb-update) solution
 But you can always do it manually, install the files, enable the services, etc.
 
 **IMPORTANT**:
-1. Add your TPMS sensors' Bluetooth device MAC addresses in the `tpms_mqtt.service`. You can find it using any Bluetooth scanner such as: [Bluetooth Finder, Scanner Pair](https://play.google.com/store/apps/details?id=com.pzolee.bluetoothscanner)
+1. Add your TPMS sensors' Bluetooth device MAC addresses in the [`tpms_mqtt.py`](https://github.com/KreAch3R/tpms-oap/blob/master/usr/local/bin/tpms-oap/tpms_mqtt.py#L22). You can find it using any Bluetooth scanner such as: [Bluetooth Finder, Scanner Pair](https://play.google.com/store/apps/details?id=com.pzolee.bluetoothscanner)
 2. The services are expecting a log folder location at `~/Logs`. If you don't want that, change it.
 
 # Confirming the install
