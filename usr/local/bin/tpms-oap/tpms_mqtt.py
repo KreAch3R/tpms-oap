@@ -79,7 +79,7 @@ def found_internal(device: BLEDevice, advertisement_data: AdvertisementData):
 
           data_list = [batt, temp, presspsi]
 
-    prepare_payload(device.address, data_list, TPMS_INTERNAL_MAC_LIST)
+      prepare_payload(device.address, data_list, TPMS_INTERNAL_MAC_LIST)
 
 def found_external(device: BLEDevice, advertisement_data: AdvertisementData):
   if device.address in TPMS_EXTERNAL_MAC_LIST:
