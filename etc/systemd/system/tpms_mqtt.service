@@ -6,13 +6,12 @@ After=network-online.target
 Type=simple
 User=pi
 Group=pi
-#User=root
 # Mode: internal or external
 ExecStart=/usr/bin/python3 /usr/local/bin/tpms-oap/tpms_mqtt.py --mqtt-topic tpms --mode internal
 Restart=on-failure
 RestartSec=5
 StandardOutput=file:/home/pi/Logs/tpms_mqtt.log
-StandardError=inherit
+StandardError=file:/home/pi/Logs/tpms_mqtt.error
 
 [Install]
 WantedBy=multi-user.target
