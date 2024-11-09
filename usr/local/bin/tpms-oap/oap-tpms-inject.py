@@ -28,6 +28,12 @@ logging = True
 
 NOTIFICATION_CHANNEL_ID = None
 
+# Critical Values (show Notification)
+CRITICAL_BATT = 25
+CRITICAL_TEMP = 50
+CRITICAL_PRESS_LOW = 29
+CRITICAL_PRESS_HIGH = 35
+
 ###############################################################
 # CONNECTING TO TPMS-BLEAK MQTT Publisher
 
@@ -73,13 +79,13 @@ def remove_zero_from_median(list):
 
 def is_critical(datavalue, datatype):
     if datatype == "batt":
-        if 0.0 < datavalue < 25:
+        if 0.0 < datavalue < CRITICAL_BATT:
             return True
     elif datatype == "temp":
-        if datavalue > 50:
+        if datavalue > CRITICAL_TEMP:
             return True
     elif datatype == "press":
-        if datavalue != 0.0 and not 28 <= datavalue <= 35:
+        if datavalue != 0.0 and not CRITICAL_PRESS_LOW <= datavalue <= CRITICAL_PRESS_HIGH:
             return True
     else:
         return False
