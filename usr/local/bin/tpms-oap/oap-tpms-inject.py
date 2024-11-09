@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 #
 #  Copyright (C) BlueWave Studio - All Rights Reserved
-#
-#  Modified by KreAch3R to support PECHAM TPMS
+#  Copyright (C) KreAch3R (2023) - All Rights Reserved
+
+#  Modified by KreAch3R to support PECHAM/SYSGRATION TPMS
 #
 
 # Import common functions

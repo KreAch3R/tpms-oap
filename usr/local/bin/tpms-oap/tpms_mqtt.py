@@ -1,3 +1,10 @@
+#!/usr/bin/python3
+#
+#  Copyright (C) KreAch3R (2023) - All Rights Reserved
+#
+#  Supports PECHAM/SYSGRATION external/internal TPMS sensors
+#
+
 import argparse
 import asyncio
 import logging
