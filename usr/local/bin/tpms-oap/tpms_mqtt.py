@@ -8,6 +8,7 @@
 import argparse
 import asyncio
 import logging
+import sys
 
 from bleak import BleakScanner
 from bleak.backends.device import BLEDevice
@@ -17,7 +18,7 @@ from paho.mqtt.publish import single
 
 import json
 
-logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+logging.basicConfig(stream=sys.stdout, level=logging.INFO, format="[%(asctime)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
 mqtt_topic = ""
 mqtt_port = 1883
@@ -160,7 +161,7 @@ async def main():
         scanner = BleakScanner(detection_callback=found_external, service_uuids=["27a5"])
 
     await scanner.start()
-    logging.info(f"Connected")
+    logging.info("Connected")
     await asyncio.sleep(300)
 
 
