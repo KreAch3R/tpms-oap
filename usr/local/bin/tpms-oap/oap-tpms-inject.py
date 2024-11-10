@@ -13,6 +13,7 @@ import time
 import common.Api_pb2 as oap_api
 from common.Client import Client, ClientEventHandler
 import paho.mqtt.subscribe as subscribe
+import os
 
 import json
 import statistics
@@ -23,6 +24,9 @@ TPMS_SENSORS_LIST = [ "FL", "FR", "RL", "RR" ]
 # These are linked with oap_obd_dashboards.ini
 TPMS_SENSORS_DATA_DICT = { 'press' : (10, 14) , 'batt' : (14, 18) , 'temp' : (18,22) }
 TEMP_LIST = []
+
+# Get current working directory (systemd runs from /)
+script_dir = os.path.dirname(os.path.realpath(__file__))
 
 t_injecting_active = True
 logging = True
@@ -199,7 +203,7 @@ def show_notification(client, sensor, datatype, datavalue):
     show_notification.description = description
     show_notification.single_line = description
 
-    with open("assets/" + icon, 'rb') as icon_file:
+    with open(script_dir + "/assets/" + icon, 'rb') as icon_file:
         show_notification.icon = icon_file.read()
 
     client.send(oap_api.MESSAGE_SHOW_NOTIFICATION, 0,
