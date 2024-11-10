@@ -6,6 +6,7 @@ After=network-online.target
 Type=simple
 User=pi
 Group=pi
+ExecStartPre=-!/bin/sh -c '/bin/rm -r /home/pi/Logs/oap-tpms-inject.*'
 ExecStart=/usr/bin/python3 /usr/local/bin/tpms-oap/oap-tpms-inject.py
 Restart=on-failure
 RestartSec=5
