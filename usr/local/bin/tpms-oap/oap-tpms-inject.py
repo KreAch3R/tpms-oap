@@ -69,7 +69,7 @@ def get_median_temp():
     if TEMP_LIST is not None:
         corrected_temp_list=remove_zero_from_median(TEMP_LIST)
         median = statistics.median(corrected_temp_list)
-        print("Median temp:", median)
+        print("Median temp:", median, flush=True)
         return median
     else:
         return 0
@@ -115,7 +115,8 @@ def inject_obd_gauge_formula_value(client):
 
                     obd_inject_gauge_formula_value.formula = formula
                     sensor=TPMS_SENSORS_LIST[j]
-                    print(sensor)
+                    if logging:
+                            print(sensor, flush=True)
                     datavalue = get_tpms_sensor_data(sensor, datatype)
                     obd_inject_gauge_formula_value.value = datavalue
 
@@ -227,11 +228,11 @@ class EventHandler(ClientEventHandler):
         global NOTIFICATION_CHANNEL_ID
         print(
             "register notification channel response, result: {}, icon id: {}".
-            format(message.result, message.id))
+            format(message.result, message.id), flush=True)
         NOTIFICATION_CHANNEL_ID = message.id
 
         if message.result == oap_api.RegisterNotificationChannelResponse.REGISTER_NOTIFICATION_CHANNEL_RESULT_OK:
-            print("notification channel successfully registered")
+            print("notification channel successfully registered", flush=True)
     # Notification code
 
 def main():
@@ -247,7 +248,7 @@ def main():
             # This calls the actual obd injection command
             active = oap_client.wait_for_message()
             if logging:
-                print("waiting for api connection")
+                print("waiting for api connection", flush=True)
         except KeyboardInterrupt:
             break
 
