@@ -112,6 +112,9 @@ def found_external(device: BLEDevice, advertisement_data: AdvertisementData):
 
 def prepare_payload(address: str, data_list: list, tpms_mac_list: list):
     TPMS_BLUETOOTH_MAC_LIST = tpms_mac_list
+    batt = data_list[0]
+    temp = data_list[1]
+    presspsi = data_list[2]
 
     if (address == TPMS_BLUETOOTH_MAC_LIST[0]):  # front left
         device_name="Front Left"
