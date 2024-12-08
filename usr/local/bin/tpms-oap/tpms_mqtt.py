@@ -51,19 +51,19 @@ TPMS_EXTERNAL_MAC_LIST = [ "E1:B0:00:00:2A:02", "E1:C1:00:00:98:0A", "E1:C3:00:0
 
 TPMS_SENSORS_LIST = ("FL", "FR", "RL", "RR")
 TPMS_DATA_DICT = dict.fromkeys(TPMS_SENSORS_LIST)
-print(TPMS_DATA_DICT)
+print(TPMS_DATA_DICT, flush=True)
 
 def found_internal(device: BLEDevice, advertisement_data: AdvertisementData):
   if device.address in TPMS_INTERNAL_MAC_LIST:
       mfdata = advertisement_data.manufacturer_data
-      print(mfdata)
-      print(device.address)
+      print(mfdata, flush=True)
+      print(device.address, flush=True)
       # Specific to SYSGRATION/EKETOOL internal TPMS sensors
       for i in range(0,len(mfdata)):
           mfbytes = list(mfdata.values())[i]
           byte_array = bytearray(mfbytes)
           if debugLog:
-                  print(byte_array)
+                  print(byte_array, flush=True)
 
           # Pressure is Bytes 6 to 10 (in kpa)
           press_byte=(byte_array[6:10])
@@ -72,18 +72,18 @@ def found_internal(device: BLEDevice, advertisement_data: AdvertisementData):
           # Pressure kpa to PSI and round down to 2 decimals
           presspsi=round(press/6.8945729,2)
           if debugLog:
-                  print("Pressure (PSI) :", presspsi)
+                  print("Pressure (PSI) :", presspsi, flush=True)
 
           # Temperature is Bytes 10 to 14 (in Celsius)
           temp_byte=(byte_array[10:14])
           temp=(int.from_bytes(temp_byte, 'little')/100)
           if debugLog:
-                  print("Temp: ", temp)
+                  print("Temp: ", temp, flush=True)
 
           # Battery is Byte 14 (in percentage)
           batt=(byte_array[14])
           if debugLog:
-                  print("Battery: ", batt)
+                  print("Battery: ", batt, flush=True)
 
           data_list = [batt, temp, presspsi]
 
@@ -92,8 +92,8 @@ def found_internal(device: BLEDevice, advertisement_data: AdvertisementData):
 def found_external(device: BLEDevice, advertisement_data: AdvertisementData):
   if device.address in TPMS_EXTERNAL_MAC_LIST:
       mfdata = advertisement_data.manufacturer_data
-      print(mfdata)
-      print(device.address)
+      print(mfdata, flush=True)
+      print(device.address, flush=True)
       # Specific to PECHAM external BLE TPMS sensors
       for i in range(0,len(mfdata)):
           # We only need the last element of the range
@@ -129,7 +129,7 @@ def prepare_payload(address: str, data_list: list, tpms_mac_list: list):
         device_name="Rear Right"
         TPMS_DATA_DICT["RR"] = data_list
 
-    print(device_name,": B: ",batt, "  T: ",temp,"  p: ",presspsi, sep='')
+    print(device_name,": B: ",batt, "  T: ",temp,"  p: ",presspsi, sep='', flush=True)
 
     # Create json list
     # https://stackoverflow.com/a/32824345
