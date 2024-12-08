@@ -60,8 +60,8 @@ def found_internal(device: BLEDevice, advertisement_data: AdvertisementData):
       print(device.address)
       # Specific to SYSGRATION/EKETOOL internal TPMS sensors
       for i in range(0,len(mfdata)):
-          bytes = list(mfdata.values())[i]
-          byte_array = bytearray(bytes)
+          mfbytes = list(mfdata.values())[i]
+          byte_array = bytearray(mfbytes)
           if debugLog:
                   print(byte_array)
 
@@ -74,7 +74,7 @@ def found_internal(device: BLEDevice, advertisement_data: AdvertisementData):
           if debugLog:
                   print("Pressure (PSI) :", presspsi)
 
-          # Temperature is Bytes 10 to 14 (in celsius)
+          # Temperature is Bytes 10 to 14 (in Celsius)
           temp_byte=(byte_array[10:14])
           temp=(int.from_bytes(temp_byte, 'little')/100)
           if debugLog:
@@ -116,16 +116,16 @@ def prepare_payload(address: str, data_list: list, tpms_mac_list: list):
     temp = data_list[1]
     presspsi = data_list[2]
 
-    if (address == TPMS_BLUETOOTH_MAC_LIST[0]):  # front left
+    if address == TPMS_BLUETOOTH_MAC_LIST[0]:  # front left
         device_name="Front Left"
         TPMS_DATA_DICT["FL"] = data_list
-    elif (address == TPMS_BLUETOOTH_MAC_LIST[1]):  # front right
+    elif address == TPMS_BLUETOOTH_MAC_LIST[1]:  # front right
         device_name="Front Right"
         TPMS_DATA_DICT["FR"] = data_list
-    elif (address == TPMS_BLUETOOTH_MAC_LIST[2]):  # rear left
+    elif address == TPMS_BLUETOOTH_MAC_LIST[2]:  # rear left
         device_name="Rear Left"
         TPMS_DATA_DICT["RL"] = data_list
-    elif (address == TPMS_BLUETOOTH_MAC_LIST[3]):  # rear right
+    elif address == TPMS_BLUETOOTH_MAC_LIST[3]:  # rear right
         device_name="Rear Right"
         TPMS_DATA_DICT["RR"] = data_list
 
