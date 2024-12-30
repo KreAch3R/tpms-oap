@@ -4,11 +4,13 @@ Currently:
   * PECHAM TPMS External sensors
   * SYSGRATION/EKETOOL TPMS Internal sensors
 
-Connect your TPMS BLE Sensors (currently internal and external models) to your raspberry pi running OpenAuto and use the OBD2 injection service to display the tire pressure and tire temperature in the Dashboards section:
-
+Original Android APPs:
 [SYTPMS](https://play.google.com/store/apps/details?id=com.bekubee.sytpms)
 [TPMSII](https://play.google.com/store/apps/details?id=com.chaoyue.tyed&hl=el)
 [TPMS-Advanced](https://play.google.com/store/apps/details?id=com.masselis.tpmsadvanced)
+
+Connect your TPMS BLE Sensors (currently internal and external models) to your raspberry pi running OpenAuto and use the OBD2 injection service to display the tire pressure and tire temperature in the OpenAuto Dashboards section!
+
 
 <img src="https://github.com/KreAch3R/tpms-oap/assets/2224376/6d916777-8c20-4544-ad82-7be2c9b215d3" height="400">
 <img src="https://github.com/KreAch3R/tpms-oap/assets/2224376/b9dd046e-99c2-4c94-bc12-2539bc9ee057" height="400">
