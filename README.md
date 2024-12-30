@@ -13,8 +13,9 @@ Connect your TPMS BLE Sensors (currently internal and external models) to your r
 <img src="https://github.com/KreAch3R/tpms-oap/assets/2224376/6d916777-8c20-4544-ad82-7be2c9b215d3" height="400">
 <img src="https://github.com/KreAch3R/tpms-oap/assets/2224376/b9dd046e-99c2-4c94-bc12-2539bc9ee057" height="400">
 
-
-
+<a href="https://www.paypal.com/donate/?business=R9V8AAFPNV684&no_recurring=0&currency_code=EUR">
+<img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" width="300">
+</a>
 
 # Acknowledgement
 
